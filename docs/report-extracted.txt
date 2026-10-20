@@ -1,0 +1,758 @@
+LAPORAN PROJECT 1  
+ANALISIS KESENJANGAN PEMBANGUNAN 
+ANTARKABUPATEN/KOTA DI PROVINSI KEPULAUAN RIAU 
+BERDASARKAN INDIKATOR KEPENDUDUKAN, KEMISKINAN, 
+PENDIDIKAN, DAN FASILITAS KESEHATAN TAHUN 2019–2025 
+ 
+Disusun untuk memenuhi tugas pada mata kuliah Ilmu Data  
+ 
+Dosen Pengampu: Nefrita Nikentari, S.T., M.Cs., PhD.  
+ 
+ 
+ 
+Disusun oleh Kelompok 7: 
+ 
+1. Balqis Manisa (2401020069) 
+2. Nabil (2401020073) 
+3. Annisa Darmawan (2401020087) 
+4. M. Dodi Bastian (2401020099) 
+5. Mikael Rejeki Situmorang (2401020105) 
+6. Yehezkiel Alman Siambaton (2401020110) 
+ 
+PROGRAM STUDI TEKNIK INFORMATIKA 
+JURUSAN TEKNIK ELEKTRO DAN INFORMATIKA 
+FAKULTAS TEKNIK DAN TEKNOLOGI KEMARITIMAN  
+UNIVERSITAS MARITIM RAJA ALI HAJI 
+TAHUN 2026 
+
+ii 
+DAFTAR ISI 
+DAFTAR ISI ........................................................................................................... ii 
+DAFTAR TABEL .................................................................................................. iii 
+BAB 1 Problem Definition ..................................................................................... 1 
+1.1 Latar belakang ............................................................................................... 1 
+1.2 Rumusan masalah dan tujuan ........................................................................ 1 
+1.3 Ruang lingkup dan manfaat .......................................................................... 2 
+BAB 2 Data Understanding .................................................................................... 3 
+2.1 Sumber Data dan batas keterlacakan............................................................. 3 
+2.2 Deskripsi Dataset .......................................................................................... 4 
+2.3 Variabel dan kelengkapan panel ................................................................... 5 
+2.4 Kesetaraan waktu dan unit analisis ............................................................... 7 
+2.5 Statistik deskriptif ......................................................................................... 7 
+2.6 Perkembangan kemiskinan antarwilayah ...................................................... 8 
+BAB 3 Data Preparation........................................................................................ 10 
+3.1 Data Cleaning .............................................................................................. 10 
+3.2 Missing Value ............................................................................................. 10 
+3.3 Audit konsistensi fasilitas kesehatan ........................................................... 11 
+3.4 Outlier ......................................................................................................... 12 
+3.5 Data Integration dan rekayasa fitur ............................................................. 14 
+3.6 Hasil rasio dan normalisasi ......................................................................... 15 
+3.7 Kesiapan analisis dan keterbatasan ............................................................. 16 
+Daftar sumber ........................................................................................................ 18 
+Lampiran ............................................................................................................... 19 
+A Kamus kolom dataset .................................................................................... 19 
+Lampiran A Kamus kolom dataset lanjutan .......................................................... 21 
+Lampiran B Perbedaan total puskesmas ............................................................... 22 
+ 
+ 
+iii 
+DAFTAR TABEL 
+Tabel 1 Pemetaan pertanyaan analisis..................................................................... 1 
+Tabel 2 Sumber data per dataset ............................................................................. 3 
+Tabel 3 Inventaris arsip mentah .............................................................................. 4 
+Tabel 4 Struktur lembar pada berkas olahan ........................................................... 4 
+Tabel 5 Kelompok variabel master ......................................................................... 5 
+Tabel 6 Pemeriksaan struktur panel ........................................................................ 6 
+Tabel 7 Statistik 49 observasi wilayah tahun .......................................................... 7 
+Tabel 8 Persentase kemiskinan Maret menurut wilayah ......................................... 8 
+Tabel 9 Perubahan kemiskinan 2019 ke 2025 ........................................................ 9 
+Tabel 10 Keputusan pengolahan menurut tema .................................................... 10 
+Tabel 11 Contoh kondisi mentah dan keputusan .................................................. 11 
+Tabel 12 Sebaran ketidaksesuaian puskesmas ...................................................... 11 
+Tabel 13 Contoh keterlacakan yang belum tuntas ................................................ 12 
+Tabel 14 Outlier menurut aturan IQR ................................................................... 12 
+Tabel 15 Pencocokan kategori dengan master ...................................................... 14 
+Tabel 16 Definisi empat fitur turunan ................................................................... 14 
+Tabel 17 Rasio layanan menurut master tahun 2025 ............................................ 15 
+Tabel 18 Parameter Min Max dan contoh Bintan 2019 ........................................ 16 
+Tabel 19 Ringkasan hasil pemeriksaan ................................................................. 16 
+ 
+ 
+1 
+BAB 1 
+Problem Definition 
+ 
+1.1 Latar belakang 
+Tujuh kabupaten/kota di Kepulauan Riau memiliki skala penduduk, 
+tingkat kemiskinan, dan jumlah fasilitas yang berbeda. Dalam data tahun 2025, 
+kemiskinan tercatat 3,81% di Batam dan 9,12% di Lingga. Perbedaan ini menjadi 
+alasan untuk membandingkan kondisi antarwilayah sekaligus memeriksa 
+perubahan selama 2019–2025. 
+Jumlah fasilitas absolut belum cukup untuk menilai ketersediaan layanan. 
+Wilayah berpenduduk besar dapat memiliki lebih banyak fasilitas, tetapi rasio 
+fasilitas terhadap penduduk tetap rendah. Karena itu, laporan menggunakan nilai 
+asli, indikator per penduduk, serta rasio murid terhadap guru. Rasio tersebut 
+menggambarkan ketersediaan relatif; belum mengukur mutu layanan, kapasitas 
+fasilitas, maupun jarak akses masyarakat. 
+ 
+1.2 Rumusan masalah dan tujuan 
+Analisis bertujuan menggambarkan perkembangan kemiskinan, 
+membandingkan karakteristik kependudukan dan layanan dasar, serta menilai 
+kesiapan data sebelum pemodelan. Pertanyaan dan keluaran yang dapat diperiksa 
+dirangkum berikut. 
+Tabel 1 Pemetaan pertanyaan analisis 
+Pertanyaan Metode Keluaran 
+Bagaimana kemiskinan berubah 
+menurut wilayah dan tahun? 
+Statistik dan 
+perbandingan tahun 
+Matriks 2019–2025 dan 
+perubahan poin persentase 
+Bagaimana perbedaan skala 
+penduduk dan fasilitas? 
+Deskripsi serta rasio 
+per penduduk 
+Tabel indikator absolut dan 
+rasio 
+Apakah data lengkap dan 
+konsisten? 
+Audit kunci, simbol, 
+satuan, serta total 
+Ringkasan temuan dan tindakan 
+2 
+Pertanyaan Metode Keluaran 
+Apakah data siap untuk model 
+prediktif? 
+Penilaian asal fitur 
+dan rancangan 
+evaluasi 
+Daftar batasan serta fitur yang 
+perlu diverifikasi 
+Sumber: perumusan analisis berdasarkan cakupan data [1–2]. 
+ 
+1.3 Ruang lingkup dan manfaat 
+Unit observasi adalah satu kabupaten/kota pada satu tahun, sehingga 
+terdapat 7 × 7 = 49 observasi. Agregat provinsi tidak dijadikan observasi 
+tambahan. Kemiskinan menggunakan indikator Maret, sedangkan pendidikan 
+menggunakan tahun akhir ajaran. Hubungan antartema bersifat eksploratif dan 
+tidak ditafsirkan sebagai sebab -akibat. Pemodelan serta evaluasi prediksi belum 
+dilakukan dalam laporan ini. 
+ 
+3 
+BAB 2 
+Data Understanding 
+ 
+2.1 Sumber Data dan batas keterlacakan 
+Data berasal web Resmi Ba dan Pusat Statistik Provinsi Kepulauan Riau, 
+yaitu tabel statistik per kabupaten/kota Provinsi Kepulauan Riau dalam format 
+CSV, yang dikelompokkan dalam empat dataset. Tabel mentah memuat baris total 
+provinsi, catatan kaki, serta judul kolom yang berbeda antartahun. Data yang 
+dianalisis dalam laporan ini adalah data hasil cleaning untuk periode 2019–2025. 
+Dua berkas menjadi dasar pemeriksaan. Berkas [1] menyajikan ulang isi CSV 
+mentah dalam Excel, lengkap dengan nama berkas sumber, jenis baris, dan nomor 
+baris CSV. Berkas [2] memuat tabel kategori serta Master_Integrasi. 
+Master_Integrasi berasal dari integrasi terdahulu yang disaring ke 2019 –2025. 
+Pemeriksaan dalam laporan ini dilakukan pada isi kedua berkas tersebut; identitas 
+publikasi dan tautan tabel resmi perlu dilengkapi untuk penelusuran ke penerbit 
+awal. 
+Tabel 2 Sumber data per dataset 
+Tema Periode Isi data 
+Kemiskinan 2019–2025 
+Garis kemiskinan, jumlah penduduk miskin, dan 
+persentase penduduk miskin (posisi Maret) 
+Kependudukan 2019–2025 
+Jumlah penduduk, laju pertumbuhan, persentase terhadap 
+provinsi, kepadatan, dan rasio jenis kelamin 
+Pendidikan 
+Tahun ajaran 
+2018/2019–
+2024/2025 
+Jumlah sekolah, guru, dan murid jenjang SD, SMP, 
+SMA, dan SMK (negeri + swasta) 
+Kesehatan 2019–2025 
+Jumlah rumah sakit umum dan khusus, Puskesmas, 
+klinik pratama, dan Posyandu 
+4 
+ 
+ 
+Tabel 3 Inventaris arsip mentah 
+Lembar Blok CSV 
+Baris 
+DATA 
+… – - 
+Kemiskinan 7 62 138 0 1 
+Kependudukan 7 94 0 0 0 
+Kesehatan 9 84 58 58 0 
+SD 7 62 0 0 3 
+SMP 8 74 0 0 0 
+SMA 7 63 0 0 21 
+SMK 7 63 0 0 27 
+Sumber: hitungan pada [1]. Simbol … mewakili teks tiga titik (...). 
+Terdapat 52 blok berkas CSV: 7 kemiskinan, 7 kependudukan, 9 
+kesehatan, dan 29 pendidikan. Baris berlabel DATA adalah baris arsip, bukan 
+otomatis observasi analitis: sebagian dapat berupa agregat, catatan, atau tahun di 
+luar cakupan. Jumlah simbol dihitung pada seluruh isi baris DATA, sehingga 
+tidak sama dengan jumlah nilai hilang pada 49 observasi terpilih. 
+ 
+2.2 Deskripsi Dataset 
+Dataset akhir berbentuk data panel seimbang: 7 kabupaten/kota × 7 tahun 
+= 49 observasi. Setiap baris menunjukkan kondisi satu kabupaten/kota pada satu 
+tahun. Total provinsi tidak dimasukkan agar tidak terjadi penghitungan ganda. 
+ 
+Tabel 4 Struktur lembar pada berkas olahan 
+Dataset Baris isi Kolom Fungsi 
+Kemiskinan 49 5 Indikator Maret 
+5 
+Dataset Baris isi Kolom Fungsi 
+Kependudukan 49 7 Penduduk dan demografi 
+Pendidikan 49 16 Empat jenjang sekolah 
+Kesehatan 49 10 Fasilitas dan status 
+Master_Integrasi 49 33 Tabel utama analisis 
+Catatan 17 1 Metadata dan audit 
+Sumber: pemeriksaan struktur [2]. Baris kategori dan master tidak termasuk 
+header; Catatan berisi 17 baris teks. 
+Data pendidikan dicatat per tahun ajaran dan disesuaikan ke tahun 
+kalender dengan tahun akhir ajaran, misalnya tahun ajaran 2018/2019 menjadi 
+tahun 2019. Data kemiskinan yang digunakan hanya posisi Maret, karena posisi 
+September tidak tersedia pada data mentah. Pada laporan ini, Kota Batam ditulis 
+Batam, Kota Tanjung Pinang ditulis Tanjungpinang, dan Kepulauan Anambas 
+ditulis Anambas. 
+ 
+2.3 Variabel dan kelengkapan panel 
+Master_Integrasi berisi 33 kolom, terdiri atas 28 kolom numerik termasuk 
+Tahun dan 5 kolom teks. Empat rasio dan enam kolom normalisasi dihitung 
+sebagai keluaran analisis laporan ini, bukan diklaim sudah ada dalam Excel 
+sumber. Penambahan sepuluh kolom tersebut akan menghasilkan tabel analisis 43 
+kolom apabila diekspor terpisah. 
+ 
+Tabel 5 Kelompok variabel master 
+Kelompok 
+Jumlah 
+kolom 
+Makna dan satuan 
+Identitas 2 Kabupaten/kota dan tahun 
+Kemiskinan 3 Rupiah per kapita per bulan, ribu jiwa, persen 
+Kependudukan 5 Ribu jiwa, persen, jiwa/km², rasio jenis kelamin 
+6 
+Kelompok 
+Jumlah 
+kolom 
+Makna dan satuan 
+Kesehatan 8 Tujuh indikator cacah fasilitas dan satu status 
+Pendidikan 14 12 cacah sekolah/guru/murid; tahun ajaran dan jenjang 
+Kelengkapan 1 Penanda kategori yang tersedia 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+ 
+Tabel 6 Pemeriksaan struktur panel 
+Pemeriksaan Hasil 
+Observasi dan kolom 49 × 33 
+Wilayah unik 7 
+Tahun 2019–2025 
+Observasi per tahun 7 untuk setiap tahun 
+Duplikasi kunci wilayah–tahun 0 
+Sel kosong dalam master 0 
+Kes_Status_Data ASLI pada 49 observasi 
+Kelengkapan_Kategori 4/4 pada 49 observasi 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+ 
+Label ASLI dan 4/4 berasal dari berkas. Keduanya menunjukkan status 
+yang tercatat, bukan hasil validasi terhadap seluruh sel sumber. Master yang tidak 
+memiliki sel kosong masih dapat memuat nilai dengan asal transformasi yang 
+belum jelas atau total yang tidak cocok dengan rinciannya. 
+ 
+7 
+2.4 Kesetaraan waktu dan unit analisis 
+Satu baris menggabungkan data dalam tahun yang sama, tetapi waktu 
+rujukannya tidak selalu identik. Tahun ajaran 2018/2019 dipetakan ke 2019, 
+sedangkan kemiskinan memakai Maret. Perbedaan periode pencatatan ini harus 
+diperhatikan ketika kelak menganalisis hubungan atau membangun prediksi. 
+ 
+2.5 Statistik deskriptif 
+Tabel 7 Statistik 49 observasi wilayah tahun 
+Variabel Rerata SD Min Median Maks 
+Kemiskinan (%) 7,04 2,59 3,81 6,42 14,05 
+Penduduk miskin 
+(ribu) 
+19,48 23,84 2,72 11,56 83,57 
+Garis kemiskinan 
+(Rp) 
+554.930 156.384 376.853 496.764 954.437 
+Penduduk (ribu) 308,21 404,49 42,30 165,80 1.376,00 
+Pertumbuhan (%) 1,56 0,74 0,16 1,43 3,45 
+Kepadatan 
+(jiwa/km²) 
+486,88 606,92 39,00 126,00 1.614,00 
+Rasio jenis kelamin 104,99 1,86 101,50 105,80 107,20 
+RS umum (unit) 4,43 5,14 1,00 3,00 18,00 
+Puskesmas (unit) 12,43 4,32 7,00 13,00 20,00 
+Klinik pratama (unit) 39,43 64,27 1,00 10,00 232,00 
+Posyandu (unit) 210,86 147,55 67,00 175,00 574,00 
+Sekolah SD (unit) 138,16 100,00 66,00 97,00 386,00 
+Murid SD (orang) 32.627 43.130 5.017 18.255 138.556 
+Murid SMP (orang) 13.751 18.059 2.262 8.013 61.789 
+8 
+Variabel Rerata SD Min Median Maks 
+Murid SMA (orang) 7.447 8.538 1.418 3.809 32.882 
+Murid SMK (orang) 5.067 7.601 280 2.747 26.915 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+SD adalah simpangan baku sampel (pembagi n − 1). Setiap statistik 
+merangkum 49 pasangan wilayah –tahun, bukan 49 wilayah independen. Rerata 
+kemiskinan 7,04% merupakan rerata sederhana observasi kabupaten/kota; angka 
+ini tidak boleh disebut persentase kemiskinan resmi tingkat provinsi. 
+Rerata penduduk 308,21 ribu lebih besar daripada median 165,80 ribu. 
+Perbedaan tersebut menunjukkan pengaruh wilayah berpenduduk besar. Karena 
+itu, jumlah fasilitas absolut perlu dibaca bersama rasio terhadap penduduk. 
+Statistik puskesmas tetap mencerminkan nilai master dan tunduk pada temuan 
+konsistensi di BAB 3. 
+ 
+2.6 Perkembangan kemiskinan antarwilayah 
+Tabel 8 Persentase kemiskinan Maret menurut wilayah 
+Wilayah 2019 2020 2021 2022 2023 2024 2025 
+Bintan 6,37 6,36 6,42 6,44 5,90 5,44 4,77 
+Karimun 6,61 6,83 6,85 6,87 5,95 5,78 5,16 
+Kep. Anambas 6,44 6,56 7,09 7,51 6,95 6,67 6,35 
+Batam 4,85 4,75 5,05 5,19 5,02 4,85 3,81 
+Tanjung Pinang 9,03 9,37 9,57 9,85 7,95 6,86 5,96 
+Lingga 12,88 13,85 13,93 14,05 11,26 9,99 9,12 
+Natuna 4,42 4,43 4,95 5,32 5,25 5,04 4,81 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+ 
+9 
+Tabel 9 Perubahan kemiskinan 2019 ke 2025 
+Wilayah 2019 (%) 2025 (%) Perubahan (poin) 
+Bintan 6,37 4,77 -1,60 
+Karimun 6,61 5,16 -1,45 
+Kep. Anambas 6,44 6,35 -0,09 
+Batam 4,85 3,81 -1,04 
+Tanjung Pinang 9,03 5,96 -3,07 
+Lingga 12,88 9,12 -3,76 
+Natuna 4,42 4,81 0,39 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+ 
+Enam wilayah mencatat persentase kemiskinan 2025 yang lebih rendah 
+daripada 2019. Natuna meningkat dari 4,42% menjadi 4,81%, atau 0,39 poin 
+persentase. Penurunan terbesar terjadi di Lingga, sebesar 3,76 poin persentase. 
+Perubahan terbesar dihitung dari selisih persentase, sehingga satuannya poin 
+persentase, bukan persen pertumbuhan. Penurunan antara dua tahun tidak berarti 
+nilai selalu turun pada setiap tahun di antaranya. 
+Nilai tertinggi pada seluruh panel adalah Lingga tahun 2022 sebesar 
+14,05%, sedangkan nilai terendah adalah Batam tahun 2025 sebesar 3,81%. 
+Angka ini menggambarkan perbedaan dalam dataset; penetapan prioritas 
+kebijakan masih memerlukan informasi pendukung mengenai akses, kondisi 
+rumah tangga, dan kapasitas layanan. 
+ 
+10 
+BAB 3 
+Data Preparation 
+ 
+3.1 Data Cleaning 
+Alur kerja dimulai dari inventaris arsip mentah, identifikasi tabel dan 
+wilayah, penyelarasan periode, pemeriksaan simbol dan satuan, pencocokan 
+kunci, audit master, lalu perhitungan fitur. Berkas mentah dan master 
+dipertahankan. Penghitungan ulang tidak dianggap sebagai bukti bahwa setiap 
+tahap integrasi terdahulu telah dilakukan dengan benar. 
+Tabel 10 Keputusan pengolahan menurut tema 
+Dataset Aturan Bukti atau batasan 
+Kemiskinan 
+Gunakan indikator Maret 2019–
+2025 
+Kolom September bertanda ... tidak 
+diganti dengan Maret 
+Kependudukan Pertahankan satuan ribu jiwa 
+Konversi ke jiwa hanya saat 
+menghitung rasio 
+Pendidikan 
+Gunakan total negeri dan 
+swasta; tahun akhir ajaran 
+Label tahun ajaran dipertahankan 
+Kesehatan 
+Bedakan nol, simbol, dan 
+rincian fasilitas 
+Nilai master dibandingkan dengan 
+kolom sumber yang tersedia 
+Integrasi Satu baris per wilayah–tahun 49 kunci unik, tanpa agregat provinsi 
+Sumber: pemeriksaan struktur dan contoh isi [1–2]. 
+ 
+3.2 Missing Value 
+Pemeriksaan dilakukan pada dua tingkat. Arsip mentah mengandung 
+penanda nonangka, sedangkan master tidak memiliki sel kosong secara struktural. 
+Pemilihan kolom dapat menjelaskan sebagian perbedaan tersebut, tetapi tidak 
+membuktikan semua nilai master berasal dari pengamatan langsung. Tanda ... dan 
+tanda garis harus ditafsirkan menurut dokumentasi sumber sebelum diubah 
+menjadi angka. 
+11 
+Tabel 11 Contoh kondisi mentah dan keputusan 
+Contoh Kondisi sumber Keputusan 
+Karimun 2019 
+kemiskinan 
+September ...; Maret 6,61% Pakai indikator Maret 
+Bintan 2020 
+puskesmas 
+Rawat inap ...; nonrawat 
+inap ... 
+Asal nilai 6 dan 9 pada master 
+perlu ditelusuri 
+Bintan 2019 posyandu 
+... pada sumber 2019; master 
+162 
+Jangan menyebut nilai 
+terverifikasi langsung 
+RS khusus bertanda 
+garis 
+Simbol – pada arsip 
+Konfirmasi makna; tidak otomatis 
+nol 
+Sumber: contoh baris Bintan/Karimun pada [1], dibandingkan dengan [2]. 
+ 
+3.3 Audit konsistensi fasilitas kesehatan 
+Pada 25 dari 49 observasi (51,02%), Kes_Puskesmas berbeda dari jumlah 
+Kes_PuskesmasRawatInap dan Kes_PuskesmasNonRawatInap. Perbedaan ini 
+belum otomatis membuktikan salah input, karena definisi atau periode rujukan 
+mungkin berbeda. Namun, nilai total belum layak dianggap telah terkonfirmasi 
+oleh rinciannya. 
+Tabel 12 Sebaran ketidaksesuaian puskesmas 
+Wilayah 
+Observasi 
+berbeda 
+Tahun 
+Kep. Anambas 7 2019, 2020, 2021, 2022, 2023, 2024, 2025 
+Batam 7 2019, 2020, 2021, 2022, 2023, 2024, 2025 
+Tanjung Pinang 1 2025 
+Lingga 7 2019, 2020, 2021, 2022, 2023, 2024, 2025 
+Natuna 3 2023, 2024, 2025 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+12 
+Kes_Puskesmas bernilai tetap sepanjang tujuh tahun untuk setiap wilayah, 
+sementara sebagian rinciannya berubah. Pola konstan tidak membuktikan 
+pengisian ulang atau kesalahan, tetapi menjadi alasan memeriksa sumber tiap 
+tahun. Rincian seluruh 25 observasi disajikan pada Lampiran B. 
+Tabel 13 Contoh keterlacakan yang belum tuntas 
+Indikator Mentah Master Status 
+Bintan posyandu 2019 ... 162 
+Nilai tidak dapat dibuktikan dari baris 
+sumber 2019 
+Bintan rawat inap 
+2020 
+... 6 Asal pengisian perlu ditelusuri 
+Bintan nonrawat inap 
+2020 
+... 9 Asal pengisian perlu ditelusuri 
+Anambas puskesmas 
+2019 
+Total 7 
+Rincian 7 + 
+3 
+Total dan rincian berbeda 
+Sumber: pencocokan contoh pada lembar Kesehatan [1–2]. 
+Nilai asli master tidak diubah atau diganti dengan jumlah rincian. Rasio 
+puskesmas dalam laporan ditampilkan sebagai perhitungan dari master dengan 
+catatan kualitas. Untuk pemodelan, indikator ini perlu ditunda sampai definisi dan 
+asal nilainya dapat ditetapkan. Status ASLI harus dibaca sebagai label berkas, 
+bukan jaminan audit. 
+ 
+3.4 Outlier 
+Outlier dihitung ulang pada seluruh 49 observasi dengan batas bawah Q1 − 
+1,5 × IQR dan batas atas Q3 + 1,5 × IQR. Kuartil menggunakan interpolasi linear. 
+Pemeriksaan ini menggabungkan wilayah dan tahun; hasilnya dapat dipengaruhi 
+perbedaan skala wilayah serta pengamatan berulang. 
+Tabel 14 Outlier menurut aturan IQR 
+Variabel 
+Batas 
+bawah 
+Batas atas Jumlah Wilayah 
+13 
+Variabel 
+Batas 
+bawah 
+Batas atas Jumlah Wilayah 
+Kemiskinan (%) 1,64 11,04 5 Lingga 
+Penduduk miskin 
+(ribu) 
+-13,91 34,65 7 Batam 
+Garis kemiskinan 
+(Rp) 
+43.976,00 1.072.744,00 0 Tidak ada 
+Penduduk (ribu) -166,00 505,20 7 Batam 
+Pertumbuhan (%) -0,03 3,01 3 
+Kep. Anambas, Batam, 
+Tanjung Pinang 
+Klinik pratama 
+(unit) 
+-26,00 54,00 8 Batam, Tanjung Pinang 
+Posyandu (unit) -35,50 384,50 7 Batam 
+Murid SD (orang) -17.138,00 52.702,00 7 Batam 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+Outlier tidak otomatis dihapus. Skala penduduk Batam dan kemiskinan 
+Lingga merupakan karakteristik penting dalam perbandingan wilayah. Namun, 
+berasal dari sumber statistik tidak dengan sendirinya membuktikan suatu angka 
+benar. Konfirmasi tetap diperlukan bila terdapat perubahan tajam atau kontradiksi 
+antarkolom. 
+Contoh audit waktu: penduduk Batam berubah dari 1.376,0 ribu pada 2019 
+menjadi 1.196,4 ribu pada 2020, atau -13,05% berdasarkan hitungan antarbaris. 
+Kolom laju pertumbuhan 2020 mencatat 2,32%. Kedua ukuran tidak boleh 
+disamakan tanpa mengetahui periode dasar dan metode pencacahan/proyeksinya. 
+Tidak ada observasi yang dihapus dalam penghitungan statistik laporan ini. 
+Ambang perubahan tahunan, bila digunakan sebagai tanda pemeriksaan, perlu 
+dibedakan dari definisi pencilan IQR dan bukan alasan otomatis untuk mengoreksi 
+data. 
+ 
+14 
+3.5 Data Integration dan rekayasa fitur 
+Kunci integrasi adalah Kabupaten_Kota dan Tahun. Keempat lembar 
+kategori memiliki masing -masing 49 kunci wilayah –tahun. Kecocokan master 
+dengan lembar kategori diperiksa pada kolom bersama; pemeriksaan ini 
+memastikan konsistensi internal workbook, bukan menggantikan penelusuran 
+semua sel ke CSV asal. 
+Tabel 15 Pencocokan kategori dengan master 
+Kategori Kunci cocok 
+Kolom 
+dibandingkan 
+Sel berbeda 
+Kemiskinan 49 3 0 
+Kependudukan 49 5 0 
+Pendidikan 49 14 0 
+Kesehatan 49 8 0 
+ 
+Tabel 16 Definisi empat fitur turunan 
+Fitur Rumus Satuan 
+SD per 10.000 
+penduduk 
+SD_Sekolah_Total ÷ 
+(Jumlah_Penduduk_Ribu × 1.000) × 
+10.000 
+Unit per 10.000 
+jiwa 
+Murid per guru SMP SMP_Murid_Total ÷ SMP_Guru_Total Murid per guru 
+Puskesmas per 
+10.000 penduduk 
+Kes_Puskesmas ÷ 
+(Jumlah_Penduduk_Ribu × 1.000) × 
+10.000 
+Unit per 10.000 
+jiwa 
+RSU per 10.000 
+penduduk 
+Kes_RumahSakitUmum ÷ 
+(Jumlah_Penduduk_Ribu × 1.000) × 
+10.000 
+Unit per 10.000 
+jiwa 
+Penyebut penduduk dan guru SMP bernilai positif pada seluruh 49 
+observasi, sehingga keempat rasio dapat dihitung tanpa pembagian dengan nol. 
+15 
+Contoh Bintan 2019: 93 SD ÷ 159.400 jiwa × 10.000 = 5,8344; 7.385 murid SMP 
+÷ 471 guru = 15,6794. Rasio puskesmas dan RSU masing -masing 0,9410 dan 
+0,0627 per 10.000 penduduk. 
+Jumlah SD per penduduk tidak sama dengan pemerataan pendidikan usia 
+sekolah, karena penyebutnya seluruh penduduk. Rasio murid/guru tidak mengukur 
+mutu pengajaran. Demikian pula, jumlah fasilitas kesehatan tidak menunjukkan 
+jumlah tempat tidur, tenaga kesehatan, atau jarak tempuh. 
+ 
+3.6 Hasil rasio dan normalisasi 
+Tabel 17 Rasio layanan menurut master tahun 2025 
+Wilayah SD per 10.000 
+Murid per 
+guru SMP 
+Puskesmas 
+per 10.000 
+RSU per 
+10.000 
+Bintan 5,8065 13,8791 0,8798 0,0587 
+Karimun 5,2632 13,0077 0,4887 0,1128 
+Kep. Anambas 13,4921 5,9215 1,3889 0,5952 
+Batam 2,9761 19,2429 0,1542 0,1388 
+Tanjung Pinang 3,0417 16,1394 0,2917 0,1250 
+Lingga 13,3981 10,3634 1,0680 0,1942 
+Natuna 9,6774 8,4597 1,6129 0,2304 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+Rasio puskesmas pada Tabel 3.8 bersifat sementara karena menggunakan 
+kolom total yang memiliki temuan audit. Nilai rasio yang lebih besar tidak 
+otomatis berarti layanan lebih baik: persebaran pulau, kapasitas, dan kebutuhan 
+penduduk belum tercakup. 
+Normalisasi Min-Max dihitung dengan x′ = (x − minimum) ÷ (maksimum 
+− minimum). Enam fitur berikut diskalakan menggunakan seluruh 49 observasi 
+untuk deskripsi awal. Identitas wilayah, tahun, dan status tidak diskalakan. Nilai 0 
+berarti minimum relatif dataset, bukan ketiadaan kondisi atau fasilitas. 
+16 
+Tabel 18 Parameter Min Max dan contoh Bintan 2019 
+Fitur Minimum Maksimum Nilai asli Min Max 
+Kemiskinan (%) 3,8100 14,0500 6,3700 0,2500 
+Kepadatan (jiwa/km²) 39,0000 1.614,0000 121,0000 0,0521 
+SD per 10.000 penduduk 2,5291 15,6028 5,8344 0,2528 
+Murid per guru SMP 5,8265 21,6278 15,6794 0,6235 
+Puskesmas per 10.000 
+penduduk 
+0,1453 1,7995 0,9410 0,4810 
+RSU per 10.000 penduduk 0,0587 0,7092 0,0627 0,0063 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+Seluruh fitur memiliki rentang lebih besar dari nol dan hasil transformasi 
+berada pada 0 –1. Normalisasi mengubah skala, bukan menghapus pencilan atau 
+memperbaiki asal data. Untuk evaluasi prediksi, pembagian waktu harus 
+dilakukan sebelum menghitung parameter scaler pada data latih; data uji 
+menggunakan parameter tersebut. 
+ 
+3.7 Kesiapan analisis dan keterbatasan 
+Tabel 19 Ringkasan hasil pemeriksaan 
+Aspek Hasil Implikasi 
+Panel 
+49 kunci unik, tujuh wilayah dan 
+tujuh tahun 
+Lengkap secara struktur 
+Konsistensi 
+kategori 
+Kolom bersama diperiksa 
+terhadap master 
+Konsistensi internal tidak 
+membuktikan validitas sumber 
+Nilai kosong 0 sel kosong dalam master 
+Simbol pada mentah tetap perlu 
+ditelusuri 
+Puskesmas 
+25 observasi berbeda dari 
+jumlah rincian 
+Verifikasi sebelum memakai fitur 
+pada model 
+17 
+Aspek Hasil Implikasi 
+Fitur turunan 
+4 rasio dan 6 normalisasi 
+dihitung ulang 
+Hasil analisis tambahan, tidak 
+tersimpan di sumber 
+Pemodelan Belum dilakukan 
+Belum ada skor akurasi atau hasil 
+prediksi 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+Data sudah mendukung deskripsi struktur panel dan perkembangan 
+kemiskinan, tetapi kesiapan seluruh fitur untuk pemodelan belum dapat 
+dinyatakan. Pemeriksaan lanjutan harus memprioritaskan asal nilai kesehatan 
+yang terisi ketika sumber bertanda tidak tersedia, definisi total puskesmas, dan 
+kesetaraan periode pengukuran. 
+Jika regresi dilanjutkan, target dan waktu prediksi perlu ditetapkan terlebih 
+dahulu. Fitur harus tersedia pada saat prediksi dibuat. Evaluasi menurut waktu 
+lebih sesuai untuk tujuan prediksi tahun berikutnya, dengan pembanding 
+sederhana dan pelaporan ukuran galat. Observasi berulang atas tujuh wilayah juga 
+perlu dipertimbangkan agar 49 baris tidak diperlakukan sebagai 49 wilayah 
+independen. 
+ 
+18 
+Daftar sumber 
+[1] DATA_SAINS_MENTAH_SEBELUM_CLEANING.xlsx. Arsip tabel 
+mentah yang disediakan kelompok. Lembar PETUNJUK menyebut sumber 
+DATA SAINS.zip berisi 52 CSV. Digunakan untuk inventaris, simbol nonangka, 
+dan pencocokan contoh sumber. 
+[2] Data_Sains_Kepri_2019_2025 (12).xlsx. Berkas olahan yang disediakan 
+kelompok. Lembar Kemiskinan, Kependudukan, Pendidikan, Kesehatan, 
+Master_Integrasi, dan Catatan. Digunakan untuk seluruh statistik dan rasio 
+laporan. 
+Nama berkas dan lembar di atas memungkinkan penelusuran hasil dalam arsip 
+kelompok. Daftar tabel resmi beserta URL spesifik, tahun publikasi, dan tanggal 
+akses masih perlu dilengkapi dari catatan pengumpulan data. Nama sumber resmi 
+tidak ditambahkan sebagai klaim verifikasi tanpa bukti halaman asal. 
+ 
+19 
+Lampiran 
+A Kamus kolom dataset 
+ 
+Tabel A.1 Kolom 1 sampai 17 pada master 
+No Nama kolom Satuan atau jenis 
+1 Kabupaten_Kota Teks / kategori 
+2 Tahun Tahun 
+3 Garis_Kemiskinan_Maret_Rp Rp per kapita per bulan 
+4 Penduduk_Miskin_Maret_Ribu Ribu jiwa 
+5 Kemiskinan_Maret_Persen Persen 
+6 Jumlah_Penduduk_Ribu Ribu jiwa 
+7 Laju_Pertumbuhan_Penduduk Persen 
+8 Persentase_Penduduk_Provinsi Persen 
+9 Kepadatan_Penduduk_Sumber Jiwa/km² 
+10 Rasio_Jenis_Kelamin 
+Laki-laki per 100 
+perempuan 
+11 Kes_RumahSakitUmum Cacah 
+12 Kes_RumahSakitKhusus Cacah 
+13 Kes_PuskesmasRawatInap Cacah 
+14 Kes_PuskesmasNonRawatInap Cacah 
+15 Kes_KlinikPratama Cacah 
+16 Kes_Posyandu Cacah 
+17 Kes_Puskesmas Cacah 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+20 
+Kolom numerik pada tabel ini dibaca sesuai satuan sumber olahan. Nama 
+kolom dipertahankan agar dapat dicocokkan langsung dengan Excel. Nol fasilitas 
+dan nilai kosong merupakan konsep yang berbeda. 
+ 
+21 
+Lampiran A Kamus kolom dataset lanjutan 
+ 
+Tabel A.2 Kolom 18 sampai 33 pada master 
+No Nama kolom Satuan atau jenis 
+18 Kes_Status_Data Teks / kategori 
+19 SD_Sekolah_Total Cacah 
+20 SD_Guru_Total Cacah 
+21 SD_Murid_Total Cacah 
+22 SMP_Sekolah_Total Cacah 
+23 SMP_Guru_Total Cacah 
+24 SMP_Murid_Total Cacah 
+25 SMA_Sekolah_Total Cacah 
+26 SMA_Guru_Total Cacah 
+27 SMA_Murid_Total Cacah 
+28 SMK_Sekolah_Total Cacah 
+29 SMK_Guru_Total Cacah 
+30 SMK_Murid_Total Cacah 
+31 Pendidikan_Tahun_Ajaran Teks / kategori 
+32 Pendidikan_Jenjang_Tersedia Teks / kategori 
+33 Kelengkapan_Kategori Teks / kategori 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+Kolom *_Sekolah_Total menghitung unit sekolah; *_Guru_Total dan 
+*_Murid_Total menghitung orang. Total mencakup negeri dan swasta menurut 
+kategori pada tabel sumber. Pendidikan_Jenjang_Tersedia mencatat cakupan 
+jenjang, sedangkan Kelengkapan_Kategori mencatat cakupan tema, bukan 
+kelulusan pemeriksaan kualitas. 
+22 
+Lampiran B Perbedaan total puskesmas 
+Tabel B.1 Observasi dengan total berbeda dari rincian 
+Wilayah Tahun Rawat inap 
+Nonrawat 
+inap 
+Jumlah 
+rincian 
+Total 
+master 
+Kep. Anambas 2019 7 3 10 7 
+Kep. Anambas 2020 7 3 10 7 
+Kep. Anambas 2021 7 3 10 7 
+Kep. Anambas 2022 7 3 10 7 
+Kep. Anambas 2023 5 5 10 7 
+Kep. Anambas 2024 7 3 10 7 
+Kep. Anambas 2025 6 4 10 7 
+Batam 2019 0 21 21 20 
+Batam 2020 0 21 21 20 
+Batam 2021 0 21 21 20 
+Batam 2022 0 21 21 20 
+Batam 2023 0 21 21 20 
+Batam 2024 0 21 21 20 
+Batam 2025 0 21 21 20 
+Tanjung Pinang 2025 1 7 8 7 
+Lingga 2019 5 8 13 11 
+Lingga 2020 5 8 13 11 
+Lingga 2021 5 8 13 11 
+Lingga 2022 5 8 13 11 
+Lingga 2023 5 9 14 11 
+Lingga 2024 5 9 14 11 
+23 
+Wilayah Tahun Rawat inap 
+Nonrawat 
+inap 
+Jumlah 
+rincian 
+Total 
+master 
+Lingga 2025 6 8 14 11 
+Natuna 2023 10 5 15 14 
+Natuna 2024 6 9 15 14 
+Natuna 2025 9 6 15 14 
+Sumber: perhitungan ulang dari Master_Integrasi pada berkas olahan [2]. 
+Daftar ini adalah hasil pemeriksaan kesamaan aritmetika. Perbedaan 
+dipertahankan sebagai temuan dan tidak digunakan untuk mengganti nilai total 
+secara otomatis. Penetapan nilai yang benar membutuhkan rujukan definisi dan 
+periode sumber. 

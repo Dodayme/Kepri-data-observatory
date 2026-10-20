@@ -1,0 +1,268 @@
+{
+  "file": "Data_Sains_Kepri_2019_2025 (12).xlsx",
+  "sheets": [
+    "Kemiskinan",
+    "Kependudukan",
+    "Pendidikan",
+    "Kesehatan",
+    "Master_Integrasi",
+    "Catatan"
+  ],
+  "columns": [
+    "Kabupaten_Kota",
+    "Tahun",
+    "Garis_Kemiskinan_Maret_Rp",
+    "Penduduk_Miskin_Maret_Ribu",
+    "Kemiskinan_Maret_Persen",
+    "Jumlah_Penduduk_Ribu",
+    "Laju_Pertumbuhan_Penduduk",
+    "Persentase_Penduduk_Provinsi",
+    "Kepadatan_Penduduk_Sumber",
+    "Rasio_Jenis_Kelamin",
+    "Kes_RumahSakitUmum",
+    "Kes_RumahSakitKhusus",
+    "Kes_PuskesmasRawatInap",
+    "Kes_PuskesmasNonRawatInap",
+    "Kes_KlinikPratama",
+    "Kes_Posyandu",
+    "Kes_Puskesmas",
+    "Kes_Status_Data",
+    "SD_Sekolah_Total",
+    "SD_Guru_Total",
+    "SD_Murid_Total",
+    "SMP_Sekolah_Total",
+    "SMP_Guru_Total",
+    "SMP_Murid_Total",
+    "SMA_Sekolah_Total",
+    "SMA_Guru_Total",
+    "SMA_Murid_Total",
+    "SMK_Sekolah_Total",
+    "SMK_Guru_Total",
+    "SMK_Murid_Total",
+    "Pendidikan_Tahun_Ajaran",
+    "Pendidikan_Jenjang_Tersedia",
+    "Kelengkapan_Kategori"
+  ],
+  "rows": 49,
+  "regions": [
+    "Bintan",
+    "Karimun",
+    "Kepulauan Anambas",
+    "Kota Batam",
+    "Kota Tanjung Pinang",
+    "Lingga",
+    "Natuna"
+  ],
+  "years": [
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "puskesmas_mismatch_count": 25,
+  "puskesmas_mismatches": [
+    {
+      "Kabupaten_Kota": "Kepulauan Anambas",
+      "Tahun": 2019,
+      "Kes_Puskesmas": 7,
+      "Kes_PuskesmasRawatInap": 7,
+      "Kes_PuskesmasNonRawatInap": 3,
+      "selisih": -3
+    },
+    {
+      "Kabupaten_Kota": "Kota Batam",
+      "Tahun": 2019,
+      "Kes_Puskesmas": 20,
+      "Kes_PuskesmasRawatInap": 0,
+      "Kes_PuskesmasNonRawatInap": 21,
+      "selisih": -1
+    },
+    {
+      "Kabupaten_Kota": "Lingga",
+      "Tahun": 2019,
+      "Kes_Puskesmas": 11,
+      "Kes_PuskesmasRawatInap": 5,
+      "Kes_PuskesmasNonRawatInap": 8,
+      "selisih": -2
+    },
+    {
+      "Kabupaten_Kota": "Kepulauan Anambas",
+      "Tahun": 2020,
+      "Kes_Puskesmas": 7,
+      "Kes_PuskesmasRawatInap": 7,
+      "Kes_PuskesmasNonRawatInap": 3,
+      "selisih": -3
+    },
+    {
+      "Kabupaten_Kota": "Kota Batam",
+      "Tahun": 2020,
+      "Kes_Puskesmas": 20,
+      "Kes_PuskesmasRawatInap": 0,
+      "Kes_PuskesmasNonRawatInap": 21,
+      "selisih": -1
+    },
+    {
+      "Kabupaten_Kota": "Lingga",
+      "Tahun": 2020,
+      "Kes_Puskesmas": 11,
+      "Kes_PuskesmasRawatInap": 5,
+      "Kes_PuskesmasNonRawatInap": 8,
+      "selisih": -2
+    },
+    {
+      "Kabupaten_Kota": "Kepulauan Anambas",
+      "Tahun": 2021,
+      "Kes_Puskesmas": 7,
+      "Kes_PuskesmasRawatInap": 7,
+      "Kes_PuskesmasNonRawatInap": 3,
+      "selisih": -3
+    },
+    {
+      "Kabupaten_Kota": "Kota Batam",
+      "Tahun": 2021,
+      "Kes_Puskesmas": 20,
+      "Kes_PuskesmasRawatInap": 0,
+      "Kes_PuskesmasNonRawatInap": 21,
+      "selisih": -1
+    },
+    {
+      "Kabupaten_Kota": "Lingga",
+      "Tahun": 2021,
+      "Kes_Puskesmas": 11,
+      "Kes_PuskesmasRawatInap": 5,
+      "Kes_PuskesmasNonRawatInap": 8,
+      "selisih": -2
+    },
+    {
+      "Kabupaten_Kota": "Kepulauan Anambas",
+      "Tahun": 2022,
+      "Kes_Puskesmas": 7,
+      "Kes_PuskesmasRawatInap": 7,
+      "Kes_PuskesmasNonRawatInap": 3,
+      "selisih": -3
+    },
+    {
+      "Kabupaten_Kota": "Kota Batam",
+      "Tahun": 2022,
+      "Kes_Puskesmas": 20,
+      "Kes_PuskesmasRawatInap": 0,
+      "Kes_PuskesmasNonRawatInap": 21,
+      "selisih": -1
+    },
+    {
+      "Kabupaten_Kota": "Lingga",
+      "Tahun": 2022,
+      "Kes_Puskesmas": 11,
+      "Kes_PuskesmasRawatInap": 5,
+      "Kes_PuskesmasNonRawatInap": 8,
+      "selisih": -2
+    },
+    {
+      "Kabupaten_Kota": "Kepulauan Anambas",
+      "Tahun": 2023,
+      "Kes_Puskesmas": 7,
+      "Kes_PuskesmasRawatInap": 5,
+      "Kes_PuskesmasNonRawatInap": 5,
+      "selisih": -3
+    },
+    {
+      "Kabupaten_Kota": "Kota Batam",
+      "Tahun": 2023,
+      "Kes_Puskesmas": 20,
+      "Kes_PuskesmasRawatInap": 0,
+      "Kes_PuskesmasNonRawatInap": 21,
+      "selisih": -1
+    },
+    {
+      "Kabupaten_Kota": "Lingga",
+      "Tahun": 2023,
+      "Kes_Puskesmas": 11,
+      "Kes_PuskesmasRawatInap": 5,
+      "Kes_PuskesmasNonRawatInap": 9,
+      "selisih": -3
+    },
+    {
+      "Kabupaten_Kota": "Natuna",
+      "Tahun": 2023,
+      "Kes_Puskesmas": 14,
+      "Kes_PuskesmasRawatInap": 10,
+      "Kes_PuskesmasNonRawatInap": 5,
+      "selisih": -1
+    },
+    {
+      "Kabupaten_Kota": "Kepulauan Anambas",
+      "Tahun": 2024,
+      "Kes_Puskesmas": 7,
+      "Kes_PuskesmasRawatInap": 7,
+      "Kes_PuskesmasNonRawatInap": 3,
+      "selisih": -3
+    },
+    {
+      "Kabupaten_Kota": "Kota Batam",
+      "Tahun": 2024,
+      "Kes_Puskesmas": 20,
+      "Kes_PuskesmasRawatInap": 0,
+      "Kes_PuskesmasNonRawatInap": 21,
+      "selisih": -1
+    },
+    {
+      "Kabupaten_Kota": "Lingga",
+      "Tahun": 2024,
+      "Kes_Puskesmas": 11,
+      "Kes_PuskesmasRawatInap": 5,
+      "Kes_PuskesmasNonRawatInap": 9,
+      "selisih": -3
+    },
+    {
+      "Kabupaten_Kota": "Natuna",
+      "Tahun": 2024,
+      "Kes_Puskesmas": 14,
+      "Kes_PuskesmasRawatInap": 6,
+      "Kes_PuskesmasNonRawatInap": 9,
+      "selisih": -1
+    },
+    {
+      "Kabupaten_Kota": "Kepulauan Anambas",
+      "Tahun": 2025,
+      "Kes_Puskesmas": 7,
+      "Kes_PuskesmasRawatInap": 6,
+      "Kes_PuskesmasNonRawatInap": 4,
+      "selisih": -3
+    },
+    {
+      "Kabupaten_Kota": "Kota Batam",
+      "Tahun": 2025,
+      "Kes_Puskesmas": 20,
+      "Kes_PuskesmasRawatInap": 0,
+      "Kes_PuskesmasNonRawatInap": 21,
+      "selisih": -1
+    },
+    {
+      "Kabupaten_Kota": "Kota Tanjung Pinang",
+      "Tahun": 2025,
+      "Kes_Puskesmas": 7,
+      "Kes_PuskesmasRawatInap": 1,
+      "Kes_PuskesmasNonRawatInap": 7,
+      "selisih": -1
+    },
+    {
+      "Kabupaten_Kota": "Lingga",
+      "Tahun": 2025,
+      "Kes_Puskesmas": 11,
+      "Kes_PuskesmasRawatInap": 6,
+      "Kes_PuskesmasNonRawatInap": 8,
+      "selisih": -3
+    },
+    {
+      "Kabupaten_Kota": "Natuna",
+      "Tahun": 2025,
+      "Kes_Puskesmas": 14,
+      "Kes_PuskesmasRawatInap": 9,
+      "Kes_PuskesmasNonRawatInap": 6,
+      "selisih": -1
+    }
+  ]
+}
